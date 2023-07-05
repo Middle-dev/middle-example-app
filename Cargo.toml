@@ -1,0 +1,10 @@
+[package]
+name = "middle-example-app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+middle_wasm = { path = "../middle-wasm" }
+
+[lib]
+crate-type = ["cdylib"]
