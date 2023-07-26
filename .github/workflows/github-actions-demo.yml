@@ -7,5 +7,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+      - name: Install wasm32
+        run: |
+          rustup target add wasm32-unknown-unknown
       - name: Build
         run: RUSTFLAGS="-C target-feature=+multivalue" cargo build --target=wasm32-unknown-unknown
