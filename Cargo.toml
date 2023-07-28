@@ -8,3 +8,7 @@ middle_wasm = { path = "../middle-wasm" }
 
 [lib]
 crate-type = ["cdylib"]
+
+[profile.release]
+opt-level = 's'
+lto = true
