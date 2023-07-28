@@ -12,3 +12,9 @@ jobs:
           rustup target add wasm32-unknown-unknown
       - name: Build
         run: RUSTFLAGS="-C target-feature=+multivalue" cargo build --target=wasm32-unknown-unknown
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: my_build.wasm
+          path: target/wasm32-unknown-unknown/debug/middle_example_app.wasm
+          retention-days: 7
