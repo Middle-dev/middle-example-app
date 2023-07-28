@@ -1,0 +1,20 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install wasm32
+        run: |
+          rustup target add wasm32-unknown-unknown
+      - name: Build
+        run: RUSTFLAGS="-C target-feature=+multivalue" cargo build --target=wasm32-unknown-unknown
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: my_build.wasm
+          path: target/wasm32-unknown-unknown/debug/middle_example_app.wasm
+          retention-days: 7
