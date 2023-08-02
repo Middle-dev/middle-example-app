@@ -8,3 +8,7 @@ middle_wasm = { git = "https://github.com/Middle-dev/middle-wasm.git" }
 
 [lib]
 crate-type = ["cdylib"]
+
+[profile.release]
+opt-level = 's'
+lto = true

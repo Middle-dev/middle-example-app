@@ -6,4 +6,6 @@ Once you're ready to test your app on Middle, compile it with the following comm
 
     RUSTFLAGS="-C target-feature=+multivalue" cargo build --target=wasm32-unknown-unknown
 
-At this point you can 
+Or, to generate a smaller binary:
+
+    RUSTFLAGS="-C target-feature=+multivalue" cargo build --target=wasm32-unknown-unknown --release
