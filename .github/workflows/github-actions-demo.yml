@@ -19,6 +19,7 @@ jobs:
           path: target/wasm32-unknown-unknown/debug/middle_example_app.wasm
           retention-days: 7
       - name: Create release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
@@ -27,3 +28,12 @@ jobs:
             release_name: Release ${{ github.ref }}
             draft: false
             prerelease: false
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: target/wasm32-unknown-unknown/debug/middle_example_app.wasm
+          asset_name: middle_example_app.wasm
+          asset_content_type: middle/wasm
