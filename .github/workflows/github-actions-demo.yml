@@ -1,5 +1,5 @@
 name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: ${{ github.actor }} updated main! 🚀
 on: [push]
 jobs:
   Explore-GitHub-Actions:
@@ -12,3 +12,12 @@ jobs:
           rustup target add wasm32-unknown-unknown
       - name: Build
         run: RUSTFLAGS="-C target-feature=+multivalue" cargo build --target=wasm32-unknown-unknown
+      - name: Create release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          with:
+            tag_name: ${{ github.ref }}
+            release_name: Release ${{ github.ref }}
+            draft: false
+            prerelease: false
