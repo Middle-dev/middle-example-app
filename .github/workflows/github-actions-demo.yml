@@ -19,7 +19,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: my_build.wasm
-          path: target/wasm32-unknown-unknown/debug/middle_example_app.wasm
+          path: target/wasm32-wasi/release/middle_example_app.wasi.wasm
           retention-days: 7
       - name: Create release
         id: create_release
@@ -38,6 +38,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/wasm32-unknown-unknown/debug/middle_example_app.wasm
-          asset_name: middle_example_app.wasm
+          asset_path: target/wasm32-wasi/release/middle_example_app.wasi.wasm
+          asset_name: middle_example_app.wasi.wasm
           asset_content_type: middle/wasm

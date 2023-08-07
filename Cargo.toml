@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-middle_wasm = { git = "https://github.com/Middle-dev/middle-wasm.git" }
+# middle_wasm = { git = "https://github.com/Middle-dev/middle-wasm.git" }
+middle_wasm = { path = "../middle-wasm" }
+serde = { version = "1.0.164", features = ["derive"] }
 
 [lib]
 crate-type = ["cdylib"]
