@@ -10,6 +10,9 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+      - name: Install wasi
+        run: |
+          cargo install cargo-wasi
       - name: Install wasm32
         run: |
           rustup target add wasm32-unknown-unknown
