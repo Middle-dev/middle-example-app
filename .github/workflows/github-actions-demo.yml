@@ -17,7 +17,8 @@ jobs:
         run: |
           rustup target add wasm32-unknown-unknown
       - name: Build
-        run: RUSTFLAGS="-C target-feature=+multivalue" cargo wasi build --release
+        # run: cargo wasi build --release  # optionally, can make the wasm binary smaller, but we lose out on valuable debug data
+        run: cargo wasi build
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
