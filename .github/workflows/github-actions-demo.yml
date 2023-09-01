@@ -51,7 +51,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/wasm32-wasi/debug/${{ env.WasiArtifact }}.wasi.wasm
+          asset_path: target/wasm32-wasi/debug/${{ env.WasiArtifact }}
           asset_name: output.wasi.wasm
           asset_content_type: middle/wasm
   
