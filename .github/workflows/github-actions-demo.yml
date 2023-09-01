@@ -19,11 +19,16 @@ jobs:
       - name: Build
         # run: cargo wasi build --release  # optionally, can make the wasm binary smaller, but we lose out on valuable debug data
         run: cargo wasi build
+      - name: Grab compiled wasm name
+        shell: bash
+        run: |
+            WASI_ARTIFACT=`ls target/wasm32-wasi/debug/ | grep -e ".*\.wasi\.wasm$"`
+            echo "WasiArtifact=$WASI_ARTIFACT" >> $GITHUB_ENV
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: my_build.wasm
-          path: target/wasm32-wasi/debug/middle_example_app.wasi.wasm
+          path: target/wasm32-wasi/debug/${{ env.WasiArtifact }}
           retention-days: 7
       - name: Create release
         id: create_release
@@ -42,6 +47,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/wasm32-wasi/debug/middle_example_app.wasi.wasm
-          asset_name: middle_example_app.wasi.wasm
+          asset_path: target/wasm32-wasi/debug/${{ env.WasiArtifact }}.wasi.wasm
+          asset_name: output.wasi.wasm
           asset_content_type: middle/wasm
+  
