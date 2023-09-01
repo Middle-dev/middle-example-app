@@ -10,6 +10,10 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+      - name: Install rust nightly # annoyingly, needed to use #![feature(vec_into_raw_parts)]
+        run: rustup install nightly
+      - name: Switch to nightly as default
+        run: rustup default nightly
       - name: Install wasi
         run: |
           cargo install cargo-wasi
