@@ -1,11 +1,10 @@
 use std::time::Duration;
-
 use middle_wasm::prelude::*;
-
 
 #[middle_fn]
 /// This function returns `Hello, {input.name}`
 fn make_hello(name: String) -> String {
+    mprint("you can print to the console by calling mprint()");
     format!("Hello, {name}!")
 }
 
