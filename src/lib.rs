@@ -1,6 +1,7 @@
 use std::time::Duration;
 use middle_wasm::prelude::*;
 
+
 #[middle_fn]
 /// This function returns `Hello, {input.name}`
 fn make_hello(name: String) -> String {
@@ -17,7 +18,7 @@ fn test_workflow(to_print: String) -> Resumable<String> {
     // This code will repeatedly execute until a non-500 error is returned.
     // There's an upper-bound to the number of steps executed, after which an error will result.
     let out = loop {
-        let out = middle_wasm::RequestBuilder::get("https://middle.app")
+        let out = RequestBuilder::get("https://middle.app")
             .call()
             .unwrap();
 
@@ -35,4 +36,57 @@ fn test_workflow(to_print: String) -> Resumable<String> {
     
     // We have to return Ready when the workflow is done.
     Resumable::Ready("I'm done!".to_string())
+}
+
+#[derive(JsonSchema, Deserialize)]
+struct ContactForm {
+    /// First name
+    first: String,
+
+    /// Last name
+    last: String,
+}
+
+#[derive(JsonSchema, Deserialize)]
+enum ContactPrompt {
+    /// Do you want to enter another contact?
+    Contact(ContactForm),
+
+    /// All done?
+    Done
+}
+
+#[middle_workflow]
+/// This example workflow prompts for user input.
+/// If a user selects to run this workflow, the workflow will stop at each "prompt" and ask for input before continuing.
+/// In this way, you can create a "wizard" flow that, step by step, accepts and processes a series of user inputs.
+fn collect_contacts() -> Resumable<()> {
+    let mut contacts = vec![];
+
+    loop {
+        // Call `prompt`, a generic function whose single type must be transformable into a JSON-schema .
+        // We will use that schema to generate a nice form for the user to work with.
+        // Prompt may return an error, which we unwrap. 
+        // This schema can be an enum, which is helpful for loops like this.
+        let contact_or_done = match prompt::<ContactPrompt>()? {
+            Ok(contact_or_done) => contact_or_done,
+            Err(error) => {
+                mprint(format!("error from prompt: {error:?}"));
+                return Resumable::Ready(());
+            },
+        };
+        match contact_or_done {
+            ContactPrompt::Contact(contact) => {
+                mprint(format!("Hello, {} {}", contact.first, contact.last));
+                contacts.push(contact)
+            },
+            ContactPrompt::Done => break
+        }
+    }
+
+    // We do nothing with the contacts we collected, other than print the length to the console.
+    // But imagine, you could post the contacts to a CRM, or an email, or some other useful thing! 
+    mprint(format!("All done! {} contacts found", contacts.len()));
+
+    Resumable::Ready(())
 }
