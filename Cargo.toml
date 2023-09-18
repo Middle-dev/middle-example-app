@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-middle_wasm = { git = "https://github.com/Middle-dev/middle-wasm.git", tag = "v0.0.5" }
+middle_wasm = { git = "https://github.com/Middle-dev/middle-wasm.git", tag = "v0.0.6" }
 # middle_wasm = { path = "../middle-wasm" }
 serde = { version = "1.0.164", features = ["derive"] }
 schemars = "0.8.12"
