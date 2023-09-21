@@ -37,6 +37,15 @@ fn test_workflow(to_print: String) -> Resumable<String> {
     Resumable::Ready("I'm done!".to_string())
 }
 
+#[middle_workflow]
+/// This test workflow pauses once and then returns.
+fn test_pause() -> Resumable<()> {
+    mprint(format!("pausing for 5 seconds..."));
+    middle_wasm::pause(Duration::from_secs(5));
+    mprint(format!("pause complete!"));
+    Resumable::Ready(())
+}
+
 #[derive(JsonSchema, Deserialize)]
 struct ContactForm {
     /// First name
