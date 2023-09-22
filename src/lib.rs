@@ -46,8 +46,8 @@ fn test_pause() -> Resumable<()> {
     Resumable::Ready(())
 }
 
-#[derive(JsonSchema, Deserialize)]
-struct ContactForm {
+#[derive(JsonSchema, Deserialize, Serialize)]
+struct Contact {
     /// First name
     first: String,
 
@@ -58,7 +58,7 @@ struct ContactForm {
 #[derive(JsonSchema, Deserialize)]
 enum ContactPrompt {
     /// Do you want to enter another contact?
-    Contact(ContactForm),
+    Contact(Contact),
 
     /// All done?
     Done
@@ -68,7 +68,7 @@ enum ContactPrompt {
 /// This example workflow prompts for user input.
 /// If a user selects to run this workflow, the workflow will stop at each "prompt" and ask for input before continuing.
 /// In this way, you can create a "wizard" flow that, step by step, accepts and processes a series of user inputs.
-fn collect_contacts() -> Resumable<()> {
+fn collect_contacts() -> Resumable<Result<Vec<Contact>, String>> {
     let mut contacts = vec![];
 
     loop {
@@ -80,7 +80,7 @@ fn collect_contacts() -> Resumable<()> {
             Ok(contact_or_done) => contact_or_done,
             Err(error) => {
                 mprint(format!("error from prompt: {error:?}"));
-                return Resumable::Ready(());
+                return Resumable::Ready(Err("Error from prompt!".to_string()));
             },
         };
         match contact_or_done {
@@ -96,5 +96,5 @@ fn collect_contacts() -> Resumable<()> {
     // But imagine, you could post the contacts to a CRM, or an email, or some other useful thing! 
     mprint(format!("All done! {} contacts found", contacts.len()));
 
-    Resumable::Ready(())
+    Resumable::Ready(Ok(contacts))
 }
