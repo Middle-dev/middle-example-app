@@ -49,13 +49,17 @@ fn test_pause() -> Resumable<()> {
 #[derive(JsonSchema, Deserialize, Serialize)]
 struct Contact {
     /// First name
+    #[validate(length(min = 1, max = 100))]
     first: String,
 
     /// Last name
+    #[validate(length(min = 1, max = 100))]
     last: String,
 }
 
+
 #[derive(JsonSchema, Deserialize)]
+/// Choose a contact, or indicate that you're done.
 enum ContactPrompt {
     /// Do you want to enter another contact?
     Contact(Contact),
