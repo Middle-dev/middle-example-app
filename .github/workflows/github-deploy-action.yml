@@ -27,7 +27,7 @@ jobs:
       
       - name: Compress the build
         # We don't know the name and gzip requires it, so grab the name and pipe it in
-        run: gzip target/wasm32-unknown-unknown/debug/$(ls target/wasm32-unknown-unknown/debug/ | grep -e ".*\.wasm$"))
+        run: gzip target/wasm32-unknown-unknown/debug/$(ls target/wasm32-unknown-unknown/debug/ | grep -e ".*\.wasm$")
 
       - name: Grab compiled wasm name
         shell: bash
