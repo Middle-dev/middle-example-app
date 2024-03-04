@@ -24,11 +24,15 @@ jobs:
       - name: Build
         # run: cargo build --target wasm32-unknown-unknown --release  # optionally, can make the wasm binary smaller, but we lose out on valuable debug data
         run: cargo build --target wasm32-unknown-unknown
+      
+      - name: Compress the build
+        # We don't know the name and gzip requires it, so grab the name and pipe it in
+        run: gzip $(ls | grep -e ".*\.wasm$")
 
       - name: Grab compiled wasm name
         shell: bash
         run: |
-            WASM_ARTIFACT=`ls target/wasm32-unknown-unknown/debug/ | grep -e ".*\.wasm$"`
+            WASM_ARTIFACT=`ls target/wasm32-unknown-unknown/debug/ | grep -e ".*\.wasm\.gz$"`
             echo "WasmArtifact=$WASM_ARTIFACT" >> $GITHUB_ENV
         
       - name: Upload a Build Artifact
@@ -57,5 +61,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: target/wasm32-unknown-unknown/debug/${{ env.WasmArtifact }}
-          asset_name: output.wasm
+          asset_name: output.wasm.gz  # Rename to output.wasm.gz
           asset_content_type: middle/wasm

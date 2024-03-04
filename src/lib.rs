@@ -57,7 +57,6 @@ struct Contact {
     last: String,
 }
 
-
 #[derive(JsonSchema, Deserialize)]
 /// Choose a contact, or indicate that you're done.
 enum ContactPrompt {
@@ -76,7 +75,7 @@ fn collect_contacts() -> Resumable<Result<Vec<Contact>, String>> {
     let mut contacts = vec![];
 
     loop {
-        // Call `prompt`, a generic function whose single type must be transformable into a JSON-schema .
+        // Call `prompt`, a generic function whose single type must be transformable into a JSON-schema.
         // We will use that schema to generate a nice form for the user to work with.
         // Prompt may return an error, which we unwrap. 
         // This schema can be an enum, which is helpful for loops like this.
@@ -90,14 +89,14 @@ fn collect_contacts() -> Resumable<Result<Vec<Contact>, String>> {
         match contact_or_done {
             ContactPrompt::Contact(contact) => {
                 mprint(format!("Hello, {} {}", contact.first, contact.last));
-                contacts.push(contact)
+                contacts.push(contact);
             },
             ContactPrompt::Done => break
         }
     }
 
     // We do nothing with the contacts we collected, other than print the length to the console.
-    // But imagine, you could post the contacts to a CRM, or an email, or some other useful thing! 
+    // But imagine, you could post the contacts to a CRM, or an email, or some other useful thing!
     mprint(format!("All done! {} contacts found", contacts.len()));
 
     Resumable::Ready(Ok(contacts))
