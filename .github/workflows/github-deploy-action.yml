@@ -27,7 +27,9 @@ jobs:
       
       - name: Compress the build
         # We don't know the name and gzip requires it, so grab the name and pipe it in
-        run: gzip target/wasm32-unknown-unknown/debug/$(ls target/wasm32-unknown-unknown/debug/ | grep -e ".*\.wasm$")
+        # Wierdly, this failed with this error: gzip: target/wasm32-unknown-unknown/debug/middle_example_app.wasm has 1 other link  -- unchanged
+        # I found a SO post saying to just force it, so we do that with -f. https://stackoverflow.com/questions/32355205/bzip2-input-file-file-txt-has-1-other-link
+        run: gzip -f target/wasm32-unknown-unknown/debug/$(ls target/wasm32-unknown-unknown/debug/ | grep -e ".*\.wasm$")
 
       - name: Grab compiled wasm name
         shell: bash
