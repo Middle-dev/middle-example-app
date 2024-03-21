@@ -8,9 +8,14 @@ fn make_hello(name: String) -> String {
     format!("Hello, {name}!")
 }
 
-#[middle_workflow]
-/// This is a test workflow, which can pause, and stop and resume later.
-fn test_workflow(to_print: String) -> Resumable<String> {
+#[no_mangle]
+pub fn print_stdout() -> () {
+    println!("Hello world");
+}
+
+#[middle_multistep_fn]
+/// This is a test multi-step function, which can pause, and stop and resume later.
+fn test_multistep_fn(to_print: String) -> Resumable<String> {
     // This function prints something to Middle's console.
     mprint("making a request...");
 
@@ -33,12 +38,12 @@ fn test_workflow(to_print: String) -> Resumable<String> {
     mprint(format!("we were supposed to print... {to_print}"));
     mprint(format!("here's the result of our call... {}", out.code()));
     
-    // We have to return Ready when the workflow is done.
+    // We have to return Ready when the multi-step function is done.
     Resumable::Ready("I'm done!".to_string())
 }
 
-#[middle_workflow]
-/// This test workflow pauses once and then returns.
+#[middle_multistep_fn]
+/// This test multi-step function that just pauses once and then returns.
 fn test_pause() -> Resumable<()> {
     mprint(format!("pausing for 5 seconds..."));
     middle_wasm::pause(Duration::from_secs(5))?;
@@ -67,9 +72,9 @@ enum ContactPrompt {
     Done
 }
 
-#[middle_workflow]
-/// This example workflow prompts for user input.
-/// If a user selects to run this workflow, the workflow will stop at each "prompt" and ask for input before continuing.
+#[middle_multistep_fn]
+/// This example multi-step function that prompts for user input.
+/// If a user selects to run this multi-step function, it will stop at each prompt and ask for input before continuing.
 /// In this way, you can create a "wizard" flow that, step by step, accepts and processes a series of user inputs.
 fn collect_contacts() -> Resumable<Result<Vec<Contact>, String>> {
     let mut contacts = vec![];
